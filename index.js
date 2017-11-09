@@ -19,7 +19,7 @@ app.on('ready', () => {
 
 ipcMain.on('todo:submit', (event, data) => {
   console.log(data);
-  //addWindow.close();
+  addWindow.close();
 });
 
 function createAddWindow() {
@@ -34,7 +34,7 @@ function createAddWindow() {
   });
   addWindow.loadURL(`file://${__dirname}/add.html`);
   addWindow.setMenu(null);
-   addWindow.webContents.openDevTools();
+  //addWindow.webContents.openDevTools();
 }
 
 const menuTemplate = [
