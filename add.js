@@ -6,7 +6,7 @@ window.onload = () =>{
     event.preventDefault();
 
     const form = document.querySelector('form').elements;
-    
+
     let data = {};
     for (var i = 0; i < form.length; i++) {
       if (form[i].localName === 'input') {
@@ -15,6 +15,6 @@ window.onload = () =>{
       }
     }
 
-    ipcRenderer.send('todo:submit', data);
+    ipcRenderer.send('todo:add', data);
   });
 }

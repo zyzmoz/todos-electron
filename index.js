@@ -14,12 +14,14 @@ app.on('ready', () => {
   //Custom menu
   const mainMenu = Menu.buildFromTemplate(menuTemplate);
   Menu.setApplicationMenu(mainMenu);
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 });
 
-ipcMain.on('todo:submit', (event, data) => {
+ipcMain.on('todo:add', (event, data) => {
+  data._id = Math.random();
   console.log(data);
   addWindow.close();
+  mainWindow.webContents.send('todos:add', data);
 });
 
 function createAddWindow() {
@@ -33,8 +35,13 @@ function createAddWindow() {
     title: "Add New Todo"
   });
   addWindow.loadURL(`file://${__dirname}/add.html`);
-  addWindow.setMenu(null);
-  //addWindow.webContents.openDevTools();
+  if (process.env.NODE_ENV === 'production')
+    addWindow.setMenu(null);
+
+  addWindow.on('closed', () => {
+    addWindow = null
+  });
+
 }
 
 const menuTemplate = [
@@ -45,7 +52,14 @@ const menuTemplate = [
       click() {
         createAddWindow();
       }
-    }, {
+    },
+    {
+      label: "Clear Todos",
+      click() {
+        mainWindow.webContents.send('todos:clear', '');
+      }
+    },
+    {
       label: "Quit",
       accelerator: process.platform === 'darwin' ? 'Command+Q' : 'Ctrl+Q',
       click() {
@@ -58,4 +72,26 @@ const menuTemplate = [
 //When iOS add an empty item menu
 if (process.platform === 'darwin') {
   menuTemplate.unshift({});
+}
+
+
+//Environment mode
+// 'production'
+// 'development'
+// 'staging'
+// 'test'
+if (process.env.NODE_ENV !== 'production') {
+  menuTemplate.push({
+    label: 'Developer',
+    submenu: [
+      { role: 'reload'},
+      {
+        label: 'Toggle Developer Tools',
+        accelerator: process.platform === 'darwin' ? 'Command+U' : 'Ctrl+U',
+        click(item, focusedItem) {
+          focusedItem.toggleDevTools();
+        }
+      }
+    ]
+  })
 }
