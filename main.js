@@ -12,7 +12,7 @@ ipcRenderer.on('todos:add', (event, data) => {
   // document.querySelector('ul').appendChild(li);
   let items = '';
   for (i in todoList) {
-    items += '<li>'+ todoList[i].todo +'<button onClick(deleteTodo('+todoList[i]._id+'))>Delete</button></li>'
+    items += '<li>'+ todoList[i].todo +'<button onClick="deleteTodo('+todoList[i]._id+')">Delete</button></li>'
     console.log(items);
   }
   document.querySelector('ul').innerHTML = items;
