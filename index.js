@@ -1,4 +1,6 @@
 const electron = require('electron');
+const todoRef = require('./firebase');
+
 const { app, BrowserWindow, Menu, ipcMain } = electron;
 
 let mainWindow;
@@ -17,9 +19,32 @@ app.on('ready', () => {
   // mainWindow.webContents.openDevTools();
 });
 
+ipcMain.on('todos:query', () => {
+  todoRef.on('value', snap => {
+    let todos = [];
+    snap.forEach(item => {
+      console.log(item);
+      let todoObj = item.val();
+      const { _id, todo } = todoObj;
+      todos.push({ _id, todo});
+    });
+    console.log(todos);
+    mainWindow.webContents.send('todos:query', todos);
+  });
+});
+
+ipcMain.on('todo:delete', (event, index) =>{
+  var query = todoRef.orderByChild('_id').equalTo(index);
+  debugger
+  query.on('child_added', function(snapshot) {
+    snapshot.ref.remove();
+  });
+});
+
 ipcMain.on('todo:add', (event, data) => {
   data._id = Math.random();
   console.log(data);
+  todoRef.push(data);
   addWindow.close();
   mainWindow.webContents.send('todos:add', data);
 });
