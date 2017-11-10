@@ -1,5 +1,6 @@
 const electron = require('electron');
 const todoAction = require('./firebase');
+const path = require('path');
 
 const { app, BrowserWindow, Menu, ipcMain } = electron;
 
@@ -7,7 +8,7 @@ let mainWindow;
 let addWindow;
 
 app.on('ready', () => {
-  mainWindow = new BrowserWindow({});
+  mainWindow = new BrowserWindow({icon: `${__dirname}/assets/icons/notepad.png` });
   mainWindow.loadURL(`file://${__dirname}/main.html` );
 
 
