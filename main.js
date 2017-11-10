@@ -6,11 +6,7 @@ window.onload = () => {
 }
 
 ipcRenderer.on('todos:add', (event, data) => {
-  
-  // const li = document.createElement('li');
-  // const text = document.createTextNode(data.todo);
-  // li.appendChild(text);
-  // document.querySelector('ul').appendChild(li);
+  todoList.push(data);
   loadTodos();
 });
 
@@ -26,7 +22,7 @@ ipcRenderer.on('todos:clear', () => {
 function loadTodos(){
   let items = '';
   for (i in todoList) {
-    items += '<li>'+ todoList[i].todo +'<button onClick="deleteTodo('+todoList[i]._id+')">Remove</button></li>'
+    items += '<li><div class="col-75">'+ todoList[i].todo +'</div><button class="btn danger" onClick="deleteTodo('+todoList[i]._id+')">Remove</button></li>'
     console.log(items);
   }
   document.querySelector('ul').innerHTML = items;
@@ -37,6 +33,8 @@ function deleteTodo(index) {
     console.log(item._id);
     return item._id;
   }).indexOf(index);
+
+  todoList.splice(removeIndex,1);
 
   ipcRenderer.send('todo:delete', index);
 

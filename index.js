@@ -1,5 +1,5 @@
 const electron = require('electron');
-const todoRef = require('./firebase');
+const todoAction = require('./firebase');
 
 const { app, BrowserWindow, Menu, ipcMain } = electron;
 
@@ -16,35 +16,22 @@ app.on('ready', () => {
   //Custom menu
   const mainMenu = Menu.buildFromTemplate(menuTemplate);
   Menu.setApplicationMenu(mainMenu);
-  // mainWindow.webContents.openDevTools();
+
 });
 
 ipcMain.on('todos:query', () => {
-  todoRef.on('value', snap => {
-    let todos = [];
-    snap.forEach(item => {
-      console.log(item);
-      let todoObj = item.val();
-      const { _id, todo } = todoObj;
-      todos.push({ _id, todo});
-    });
-    console.log(todos);
-    mainWindow.webContents.send('todos:query', todos);
+  todoAction.query('').then((res) =>{
+    mainWindow.webContents.send('todos:query', res);
   });
 });
 
 ipcMain.on('todo:delete', (event, index) =>{
-  var query = todoRef.orderByChild('_id').equalTo(index);
-  debugger
-  query.on('child_added', function(snapshot) {
-    snapshot.ref.remove();
-  });
+  todoAction.delete(index);
 });
 
 ipcMain.on('todo:add', (event, data) => {
   data._id = Math.random();
-  console.log(data);
-  todoRef.push(data);
+  todoAction.save(data);
   addWindow.close();
   mainWindow.webContents.send('todos:add', data);
 });
@@ -56,7 +43,7 @@ function createAddWindow() {
     minimizable: false,
     maximizable: false,
     width: 300,
-    height: 160,
+    height: 180,
     title: "Add New Todo"
   });
   addWindow.loadURL(`file://${__dirname}/add.html`);
@@ -81,6 +68,7 @@ const menuTemplate = [
     {
       label: "Clear Todos",
       click() {
+        todoAction.deleteAll();
         mainWindow.webContents.send('todos:clear', '');
       }
     },

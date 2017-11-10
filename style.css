@@ -4,4 +4,100 @@ html, body, h1{
   font-family: "Helvetica Neue", Helvetica, sans-serif, Arial;
   font-style: normal;
   font-weight: normal;
+  overflow: hidden;
+}
+
+ul, li {
+  text-decoration: none;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.header{
+  width: 100%;
+  background-color: #f2f2f3;
+  padding: 8px;
+  text-align: center;
+}
+
+.list {
+  width: 100%;
+  /*padding: 8px;*/
+  margin: 0 auto;
+}
+
+.list li{
+  border-bottom: 1px solid #d6d6d6;
+  padding: 8px;
+  vertical-align: middle;
+
+}
+
+
+.col-75 {
+  width: 75%;
+  float:left;
+}
+
+.col-25 {
+  width: 25%;
+  float: left;
+}
+
+.grouping:after, .grouping:before {
+  content: ' ';
+  display: table;
+}
+
+.grouping:after {
+  clear: both;
+}
+
+.btn {
+  border: 1px solid #d6d6d6;
+  border-radius: 8px;
+  padding: 5px;
+}
+
+.danger {
+  transition: ease 0.5s;
+  border: 1px solid red;
+  background-color: white;
+  color: red;
+}
+
+.danger:hover {
+  background-color: red;
+  color: white;
+}
+
+.primary {
+  transition: ease 0.5s;
+  border: 1px solid #2196F3;
+  background-color: white;
+  color: #2196F3;
+}
+
+.primary:hover {
+  background-color: #2196F3;
+  color: white;
+}
+
+.form {
+  padding: 8px;
+  overflow: hidden;
+  display: block;
+}
+
+.input-group{
+  margin-bottom: 10px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 6px;
+  border-radius: 8px;
+  border: 1px solid #d6d6d6;
+  outline: none;
 }
